@@ -1,0 +1,5 @@
+
+fun main() {
+//    initConsoleApp()
+    initHttpServer()
+}

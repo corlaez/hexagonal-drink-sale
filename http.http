@@ -1,0 +1,11 @@
+### List Stock
+# curl -X GET --location "http://localhost:8080/drink-stock"
+GET http://localhost:8080/drink-stock
+
+### Sell Drink
+# curl -X POST --location "http://localhost:8080/sell-drink?id=A1&amount=400"
+POST http://localhost:8080/sell-drink?id=A1&amount=400
+
+### List Sales (TODO)
+# curl -X GET --location "http://localhost:8080/drink-sales"
+GET http://localhost:8080/drink-sales

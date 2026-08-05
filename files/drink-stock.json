@@ -1,0 +1,20 @@
+{
+  "A1" : {
+    "id" : "A1",
+    "name" : "coca cola 250ml",
+    "price" : 200,
+    "stock" : 10
+  },
+  "A2" : {
+    "id" : "A2",
+    "name" : "pepsi 250ml",
+    "price" : 150,
+    "stock" : 5
+  },
+  "A3" : {
+    "id" : "A3",
+    "name" : "agua cielo 250ml",
+    "price" : 100,
+    "stock" : 4
+  }
+}
