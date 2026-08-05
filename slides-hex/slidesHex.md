@@ -17,10 +17,10 @@ A guide by Armando Cordova
 # The idea in one sentence
 
 > An application should be equally usable by a person, another program,
-> or a test. And you should be able to run it with the internet and the DB down
+> or a test. And you should be able to run it in isolaiton without talking to 
+> external systems (such as databases or the internet)
 
-- That is the whole goal. Everything else is technique
-- The rest of this talk: **where it came from**, and **what it actually asks of you**
+- The creator behind it: Alistair Cockburn
 
 ---
 # Roadmap
@@ -41,6 +41,7 @@ A guide by Armando Cordova
 - **1995:** Ward Cunningham creates C2, the first Wiki
   - The online world's place to discuss software patterns and architectures
 - **1997:** Wirfs-Brock mentors and reviews Alistair's _'Surviving Object-Oriented Projects'_
+- **2001:** _'Writing Effective Use Cases'_ by Alistair. Remember this one
 - **2002:** _'Object Design: Roles, Responsibilities, and Collaborations'_ by Wirfs-Brock
 
 > Hexagonal was not made in one day. It was refined with a decade of conversation.
@@ -76,7 +77,7 @@ A guide by Armando Cordova
 - c2 wiki pages: **Hexagonal Architecture** first, then **Ports and Adapters**
   - Pages were edited in place. Years of conversation survive, the revisions do not
 - Alistair formalizes the ideas and writes the 2005 article, crediting:
-  - **Rebecca's _Object Design_ (2002):** her Interfacer == Alistair's Transformer
+  - **Wirfs-Brock's _Object Design_ (2002):** her Interfacer == Alistair's Transformer
   - **GoF _Design Patterns_:** the adapter pattern, and the source of the new name
   - **Kevin Rutherford:** opinion articles that motivated Alistair to write his own
 
@@ -92,13 +93,36 @@ A guide by Armando Cordova
 ## In scope
 - The application runs without a UI or a database
   - Run it under automated tests, with no GUI
-  - Keep working when the database (or the network) is unavailable
+  - Run it when the database (or the network) is unavailable
 
 ## Out of scope
-- How to organize the business logic
 - File names, folder structure, layer counts
+- Details about how to structure your domain
 
-> If you can turn on airplane mode and your automated tests pass, you are golden
+> Your app can run with and without UI and network with a config change. Done
+
+---
+# The asterisk: Alistair thinks in use cases
+- The man wrote _'Writing Effective Use Cases'_. The bias is not subtle
+- The 2005 article has a section on use cases and the application boundary
+  - Write them at the inner hexagon without technology coupling
+- **Primary** and **secondary** are borrowed from primary and secondary **actors**
+  - Which side you draw a port on follows the use case context diagram
+- Much later and after being pressed he has shared his advice for naming ports:
+`ForPlacingOrders` (primary), `ForStoringUsers` (secondary)
+  - But you don't need to follow that naming, it's optional
+
+---
+# What about ports
+- 1 use case == 1 primary port (explicit or implicit)
+- A single secondary port? Don't mix multiple technologies into a single port
+- Are ports exclusive to a use case? No, port explosion
+- The port is a purposeful conversation, not a method (A bunch of methods)
+- Original article talks about few ports (2, 3, 4)
+    - He counts all DB communication as a single port, not individual repositories
+    - It is about external actors to the system, not necessarily classes or objects
+
+> Use cases specify what the app does. Ports group who it talks to.
 
 ---
 # Why the hexagon?
@@ -113,13 +137,14 @@ A guide by Armando Cordova
 # Lingo: primary (driver) vs. secondary (driven)
 - **Driving / primary side:** triggers that invoke the app
   - **Adapter:** translates external input (HTTP, CLI, Kafka) into core commands
-  - **Port:** the API the core exposes *(optional)*
+  - **Port:** the API the core exposes *(could be implicit)*
 - **Driven / secondary side:** invoked by the app
-  - **Port:** interface for a required capability
+  - **Port:** interface for a needed capability (save, notify, charge)
   - **Adapter:** concrete implementation (Postgres, Stripe, in-memory fake)
 - **Application ("inside the hexagon"):** use cases, domain model
 
 > The primary side calls the app. The app calls the secondary side.
+> The app is the foundation, the adapters depend on the App
 
 ---
 ![bg fit](../img/diagram.png)
@@ -130,8 +155,8 @@ A guide by Armando Cordova
 - The port is the public contract. An explicit interface is a separate choice
 - Reasons to declare one anyway: it lets you write a fake application
 - Reasons to skip it: mock libraries fake concrete types cleanly
-- Some reject faking the application at all.
-  - Primary adapter tests also test the application
+- Some reject faking the application at all
+  - For them primary adapter tests also tests the application
 
 ---
 <!-- _class: invert -->
@@ -170,10 +195,10 @@ A guide by Armando Cordova
 - Swapping Postgres for an in-memory fake is a wiring change, not a rewrite
 
 **Where people go wrong**
-- Leaking framework or side effects into the application/domain
-- Thinking it must follow strict folder or naming rules
+- Leaking framework types or side effects into the application core
+- Thinking it dictates folder structure or naming
 - Assuming it mandates DDD, CQRS, or primary ports as explicit interfaces
-- Using generic services instead of Use Cases classes
+- Generic services instead of use case classes. Alistair leans this way, I go further // WHAT TO DO WITH THIS?
 
 ---
 # Some useful links
@@ -182,6 +207,7 @@ A guide by Armando Cordova
 - Rutherford's blog, [2006 archive snapshot](https://web.archive.org/web/20060209233610/http://silkandspinach.net/blog/archives.html)
 - 2005 article, [snapshot with comments](https://web.archive.org/web/20140329201018/http://alistair.cockburn.us/Hexagonal+architecture)
 - 2005 article, no comments: [alistair.cockburn.us/hexagonal-architecture](https://alistair.cockburn.us/hexagonal-architecture)
+- 2024 book: _Hexagonal Architecture Explained_, Cockburn & Garrido de Paz
 
 ---
 <!-- _class: invert -->
