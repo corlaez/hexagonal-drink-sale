@@ -1,4 +1,4 @@
-package drink.api;
+package primaryadapters.api
 
 import drink.SellDrink
 import io.javalin.http.Context

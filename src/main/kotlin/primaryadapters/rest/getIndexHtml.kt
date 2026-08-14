@@ -1,4 +1,4 @@
-package drink.rest
+package primaryadapters.rest
 
 import drink.SellDrink
 import util.head

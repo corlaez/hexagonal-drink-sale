@@ -1,15 +1,10 @@
-package drink.storing
+package secondaryadapters.storing
 
 import com.fasterxml.jackson.core.type.TypeReference
 import drink.*
+import drink.secondaryports.ForStoringDrinkStock
 import util.JsonHelper
 import java.io.*
-
-interface ForStoringDrinkStock {
-    fun findById(id: String): DrinkStock?
-    fun getAll(): Collection<DrinkStock>
-    fun save(drinkStock: DrinkStock)
-}
 
 class ForStoringDrinkStockInMemory : ForStoringDrinkStock {
     val drinkStockMap: MutableMap<String, DrinkStock> = mutableMapOf()

@@ -1,8 +1,8 @@
 package drink
 
-import drink.storing.ForStoringSale
+import drink.secondaryports.ForStoringSale
 
-class ReportOnSales(val repo: ForStoringSale) {
+class ReportSales(val repo: ForStoringSale) {
 
     fun getAll(): Collection<DrinkSale> {
         return repo.getAll()

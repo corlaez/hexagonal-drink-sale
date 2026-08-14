@@ -1,11 +1,13 @@
 package drink
 
-import drink.storing.ForObtainingUUIDGenerator
-import drink.storing.ForStoringDrinkStock
-import drink.storing.ForStoringDrinkStockInMemory
-import drink.storing.ForStoringSale
-import drink.storing.ForStoringSaleInMemory
-import drink.time.ForProvidingClock
+import drink.secondaryports.ForObtainingUUIDGenerator
+import drink.secondaryports.ForStoringDrinkStock
+import drink.secondaryports.ForStoringSale
+import drink.secondaryports.ForProvidingClock
+import secondaryadapters.random.PredictableUUIDGeneratorSupplier
+import secondaryadapters.storing.ForStoringDrinkStockInMemory
+import secondaryadapters.storing.ForStoringSaleInMemory
+import secondaryadapters.time.FixedClockProvider
 import java.util.UUID
 
 // Use Case Results (Failure as values)
@@ -54,14 +56,14 @@ class SellDrink(
 fun main() {
     val repo = ForStoringDrinkStockInMemory() // Repository Secondary/Drink Adapter
     val saleRepo = ForStoringSaleInMemory()
-    val uuidGeneratorSupplier = ForObtainingUUIDGenerator.Predictable()
-    val clockSupplier = ForProvidingClock.FixedClockProvider()
+    val uuidGeneratorSupplier = PredictableUUIDGeneratorSupplier()
+    val clockSupplier = FixedClockProvider()
 
     val sut = SellDrink(repo, saleRepo, uuidGeneratorSupplier, clockSupplier)
 
     sut.sell("A1", 4000)
 
-    val clock = ForProvidingClock.FixedClockProvider().get()
+    val clock = FixedClockProvider().get()
     println(saleRepo.getAll().size == 1)
     println(saleRepo.getAll()[0])
     val expected = DrinkSale(UUID.fromString("bb20b45f-d4d9-4138-bd93-cb799b3970be"), "A1", "coca cola 250ml", 200, 1, clock.now())

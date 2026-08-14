@@ -1,35 +1,41 @@
-import drink.storing.ForStoringDrinkStockInMemory
+import drink.ReportSales
 import drink.SellDrink
-import drink.console.ForSellingDrinkOnConsole
-import drink.storing.ForObtainingUUIDGenerator
-import drink.storing.ForStoringSaleInMemory
-import drink.time.ForProvidingClock
+import primaryadapters.console.ForSellingDrinkOnConsole
 import org.jline.reader.EndOfFileException
 import org.jline.reader.UserInterruptException
+import primaryadapters.console.ForReportingSalesOnConsole
+import secondaryadapters.random.PredictableUUIDGeneratorSupplier
+import secondaryadapters.storing.ForStoringDrinkStockInMemory
+import secondaryadapters.storing.ForStoringSaleInMemory
+import secondaryadapters.time.FixedClockProvider
 import util.FancyConsole
 import util.enAzul
 import kotlin.system.exitProcess
 
-fun initConsoleApp() {
+fun initConsoleApp() {// Configurator
     val repo = ForStoringDrinkStockInMemory() // Repository Secondary/Drink Adapter
     val saleRepo = ForStoringSaleInMemory()
-    val uuidGenSupplier = ForObtainingUUIDGenerator.Predictable()
-    val clockSupplier = ForProvidingClock.FixedClockProvider()
+    val uuidGenSupplier = PredictableUUIDGeneratorSupplier()
+    val clockSupplier = FixedClockProvider()
 
-    val sellDrink = SellDrink(repo, saleRepo, uuidGenSupplier, clockSupplier)// USE CASE (VERBs)
-    val sellDrinkOnConsole = ForSellingDrinkOnConsole(sellDrink)// Primary/Driber Adapter
+    val sellDrink = SellDrink(repo, saleRepo, uuidGenSupplier, clockSupplier)// USE CASE (verbs)
+    val reportSales = ReportSales(saleRepo)// USE CASE (verbs)
+    val sellDrinkOnConsole = ForSellingDrinkOnConsole(sellDrink)// Primary/Driver Adapter
+    val reportSalesOnConsole = ForReportingSalesOnConsole(reportSales)// Primary/Driver Adapter
 
     try {
         while (true) {
             FancyConsole.clearScreen()
-            val s = FancyConsole.readln("Presione 1 para venta de bebida: ".enAzul())
+            val s = FancyConsole.readln("Press 1 to buy a drink. Press 2 to see sales report: ".enAzul())
             try {
                 if (s == "1") sellDrinkOnConsole.run()
-            } catch (_: UserInterruptException) { }
+                if (s == "2") reportSalesOnConsole.run()
+            } catch (_: UserInterruptException) { }// control+C
+            catch (_: EndOfFileException) { }// control+D
         }
-    } catch (_: UserInterruptException) {
+    } catch (_: UserInterruptException) {// control+c
         exitProcess(0)
-    } catch (_: EndOfFileException) {
+    } catch (_: EndOfFileException) {// control+d
         exitProcess(0)
     }
 }

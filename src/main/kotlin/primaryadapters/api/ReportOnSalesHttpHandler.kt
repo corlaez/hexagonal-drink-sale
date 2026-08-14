@@ -1,14 +1,14 @@
-package drink.api
+package primaryadapters.api
 
-import drink.ReportOnSales
+import drink.ReportSales
 import io.javalin.http.Context
 import util.withNoCacheHeaders
 
 /** Driving/Primary adapter (has a dependency on the UseCase) **/
-class ReportOnSalesApiHandler(val reportOnSales: ReportOnSales) {
+class ReportOnSalesApiHandler(val reportSales: ReportSales) {
 
     fun getAllSales(ctx: Context) {
-        val list = reportOnSales.getAll()
+        val list = reportSales.getAll()
         ctx.withNoCacheHeaders()
         ctx.json(list)
     }

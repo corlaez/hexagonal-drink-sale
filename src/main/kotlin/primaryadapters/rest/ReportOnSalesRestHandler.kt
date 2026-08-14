@@ -1,17 +1,17 @@
-package drink.rest
+package primaryadapters.rest
 
-import drink.ReportOnSales
+import drink.ReportSales
 import io.javalin.http.Context
 import util.head
 import util.withNoCacheHeaders
 
 /** Driving/Primary adapter (has a dependency on the UseCase) **/
-class ReportOnSalesRestHandler(val reportOnSales: ReportOnSales) {
+class ReportOnSalesRestHandler(val reportSales: ReportSales) {
     private val title = "Drink Sale"
 
     fun getDrinkSalesHtml(ctx: Context) {
         // CALLING YOUR USE CASE
-        val sales = reportOnSales.getAll()
+        val sales = reportSales.getAll()
         // ENCODING
         ctx.withNoCacheHeaders()
         ctx.html("""

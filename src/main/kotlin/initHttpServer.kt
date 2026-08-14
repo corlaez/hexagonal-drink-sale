@@ -1,16 +1,16 @@
-import drink.ReportOnSales
+import drink.ReportSales
 import drink.SellDrink
-import drink.api.ReportOnSalesApiHandler
-import drink.api.SellDrinkApiHandler
-import drink.rest.ReportOnSalesRestHandler
-import drink.rest.SellDrinkRestHandler
-import drink.storing.ForObtainingUUIDGenerator
-import drink.storing.ForStoringDrinkStock
-import drink.storing.ForStoringDrinkStockInFile
-import drink.storing.ForStoringSaleInFile
-import drink.time.ForProvidingClock
+import primaryadapters.api.ReportOnSalesApiHandler
+import primaryadapters.api.SellDrinkApiHandler
+import primaryadapters.rest.ReportOnSalesRestHandler
+import primaryadapters.rest.SellDrinkRestHandler
+import drink.secondaryports.ForStoringDrinkStock
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
+import secondaryadapters.random.RandomUUIDGeneratorSupplier
+import secondaryadapters.storing.ForStoringDrinkStockInFile
+import secondaryadapters.storing.ForStoringSaleInFile
+import secondaryadapters.time.SystemClockProvider
 
 private object RoutesDef {
     val rootUI = "/"
@@ -31,22 +31,22 @@ object Routes {
 val getRouteExamples = listOf(Routes.root, Routes.salesReportUI, Routes.salesReportJson, Routes.drinkStockJson)
 val postRouteExamples = listOf(Routes.sellDrinkUIHandler + "?id=A3&amount=400")
 
-fun initHttpServer() {
+fun initHttpServer() {// Configurator
     /** Init all secondary/driven adapters */
     val repo: ForStoringDrinkStock = ForStoringDrinkStockInFile()
     val saleRepo = ForStoringSaleInFile()
-    val uuidGenSupplier = ForObtainingUUIDGenerator.Random()
-    val clockSupplier = ForProvidingClock.SystemClockProvider()
+    val uuidGenSupplier = RandomUUIDGeneratorSupplier()
+    val clockSupplier = SystemClockProvider()
 
     /** Init all use cases*/
     val sellDrink = SellDrink(repo, saleRepo, uuidGenSupplier, clockSupplier)// USE CASE depends on the driven adapters
-    val reportOnSales = ReportOnSales(saleRepo)// USE CASE depends on the driven adapters
+    val reportSales = ReportSales(saleRepo)// USE CASE depends on the driven adapters
 
     /** Init all primary/driver adapters */
     val sellDrinkRestHandler = SellDrinkRestHandler(sellDrink)
-    val reportOnSalesRestHandler = ReportOnSalesRestHandler(reportOnSales)
+    val reportOnSalesRestHandler = ReportOnSalesRestHandler(reportSales)
     val sellDrinkApiHandler = SellDrinkApiHandler(sellDrink)
-    val reportOnSalesApiHandler = ReportOnSalesApiHandler(reportOnSales)
+    val reportOnSalesApiHandler = ReportOnSalesApiHandler(reportSales)
 
     /** Compose all the primary/driver adapters and start server*/
     Javalin.create { config ->
