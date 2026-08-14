@@ -2,7 +2,8 @@
 
 A small application written following Alistair Cockburn's Hexagonal architecture principles.
 
-Besides the source code, you will find slides about Hexagonal Architecture history and concepts in the `slides` folder.
+Besides the source code, you will find slides about Hexagonal Architecture history and concepts in the `docs` folder.
+HTML slides published at https://corlaez.github.io/hexagonal-drink-sale/
 
 To execute the system you can execute application's `run` gradle task.
 

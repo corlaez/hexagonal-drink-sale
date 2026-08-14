@@ -2,11 +2,11 @@
 marp: true
 theme: default
 paginate: true
-footer: '![w:50px](../img/armando.png)'
+footer: '![w:50px](./img/armando.png)'
 ---
-![bg w:300 right:45%](../img/me.jfif)
+![bg w:300 right:45%](./img/me.jfif)
 <!-- _class: invert -->
-<!-- _footer: '![invert w:50px](../img/armando.png)' -->
+<!-- _footer: '![invert w:50px](./img/armando.png)' -->
 <!-- _paginate: false -->
 # Hexagonal Architecture: Origins and Context
 A guide by Armando Cordova
@@ -69,7 +69,7 @@ A guide by Armando Cordova
   - Mho Salim's Weather Warning System, XP practitioner Kevin Rutherford
 
 ---
-![bg fit](../img/1994.png)
+![bg fit](./img/1994.png)
 
 ---
 # How the 2005 article came to be
@@ -118,7 +118,7 @@ A guide by Armando Cordova
 
 ---
 # Why the hexagon?
-![bg w:400 right:44%](../img/alistair.png)
+![bg w:400 right:44%](./img/alistair.png)
 - There is nothing inherently "6-sided"
 - Alistair chose the figure for illustration
 - Many facets $\rightarrow$ many ports
@@ -139,7 +139,7 @@ A guide by Armando Cordova
 > The app is the foundation, the adapters depend on the app
 
 ---
-![bg fit](../img/diagram.png)
+![bg fit](./img/diagram.png)
 
 ---
 # Why are primary ports optional?
@@ -215,4 +215,4 @@ A guide by Armando Cordova
 <!-- _footer: '' -->
 # Thanks
 Github: @corlaez
-![bg auto](../img/armando.png)
+![bg auto](./img/armando.png)
